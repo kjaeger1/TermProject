@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Menu</title>
+    </h:head>
+    <h:body>
+        #{image.id == null? image.setIds(menu.item.id) : null}
+        <table>
+            <tr valign="top">
+                <td>
+                    <h:form><br />                  
+                        <table width="300">
+                            <tr>
+                                <td width="50">
+                                    <h:commandLink value="prev" action="#{image.back}" rendered="#{image.backable()}"/>
+                                </td>
+                                <td>
+                                    <image src="../ImageServlet?id=#{image.id}" height="200" width="200" />
+                                </td>
+                                <td width="50">
+                                    <h:commandLink value="next" action="#{image.next}" rendered="#{image.nextable()}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                    <table width="300">
+                        <tr>
+                            <th>#{menu.item.name}</th>
+                        </tr>
+                        <tr>
+                            <td>#{menu.item.description}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <h:form>
+                        <table>
+                            #{session.setAttribute("currCat", "")}
+                            <ui:repeat var="item" value="#{menu.allActive}">
+                                <h:panelGroup rendered="#{session.getAttribute('currCat').toString().equals(item.category) ? 'false' : 'true'}">
+                                    <tr>
+                                        <td><b><br />#{item.category}</b></td>
+                                    </tr>
+                                </h:panelGroup>
+                                #{session.getAttribute('currCat').toString().equals(item.category) ? null : session.setAttribute('currCat', item.category)}
+                                <tr style="background-color: #{item.id == menu.item.id ? 'yellow' : ''}">
+                                    <td>
+                                        <h:commandLink value="#{item.name}" action="#{menu.setItem(item)}">
+                                            <f:actionListener binding="#{image.setIds(item.id)}" />
+                                        </h:commandLink>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{item.price}">
+                                            <f:convertNumber currencyCode="USD" type="currency" />
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:commandButton value="-">
+                                            <f:actionListener binding="#{menu.item == item ? null : image.setIds(item.id)}" />
+                                            <f:actionListener binding="#{menu.item == item ? null : menu.setItem(item)}" />
+                                        </h:commandButton>
+                                    </td>
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        <h:commandButton value="+">
+                                            <f:actionListener binding="#{menu.item == item ? null : image.setIds(item.id)}" />
+                                            <f:actionListener binding="#{menu.item == item ? null : menu.setItem(item)}" />
+                                        </h:commandButton>
+                                    </td>
+                                </tr>                           
+                            </ui:repeat>
+                        </table>
+                    </h:form>  
+                </td>
+            </tr>
+        </table>
+    </h:body>
+</html>

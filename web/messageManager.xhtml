@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/templates/adminLayout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="adminContentSection">   
+        <center>
+            <h:form>
+                <h:dataTable value="#{contactBean.messages}" var="messages" border="1" styleClass="tableStyle" headerClass="headingStyle" rowClasses="rowStyle">
+                    <h:column>
+                        <f:facet name="header">EDIT</f:facet>
+                        <h:selectBooleanCheckbox value="#{messages.editable}" onclick="submit()"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">NO</f:facet>
+                        <h:outputText value="#{messages.messageNumber}"/>                     
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">DATE</f:facet>
+                        <h:outputText value="#{messages.date}"/>                     
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">FIRST NAME</f:facet>
+                        <h:outputText value="#{messages.firstName}"/>                     
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">LAST NAME</f:facet>
+                        <h:outputText value="#{messages.lastName}"/>                     
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">PHONE NUMBER</f:facet>
+                        <h:outputText value="#{messages.phoneNumber}"/>                     
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">EMAIL</f:facet>
+                        <h:outputText value="#{messages.email}"/>                     
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">MESSAGE</f:facet>
+                        <h:outputText value="#{messages.message}"/>                     
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">RESPONSE</f:facet>
+                        <h:inputTextarea value="#{messages.reply}" rendered="#{messages.editable}"/>
+                        <h:outputText value="#{messages.reply}" rendered="#{not messages.editable}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">DELETE</f:facet>
+                        <h:commandLink value="Delete" action="#{contactBean.delete(messages.messageNumber)}"/>
+                    </h:column>  
+
+                    <h:column>
+                        <f:facet name="header">SAVE</f:facet>
+                        <h:commandLink value="Save" rendered="#{messages.editable}" action="#{contactBean.save(messages)}"/>
+                    </h:column>  
+                </h:dataTable>
+                <br/>
+            </h:form>
+            <h:link value="FrontEnd" outcome="contactUs" />
+        </center>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/templates/masterLayout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="contentSection">   
+        <h:form id="contactForm">
+            <h2>New Message:</h2><br/>
+            <h:panelGrid columns="3">
+                First Name:
+                <h:inputText id="fname" size="30" value="#{contactBean.firstName}"
+                             required="true"
+                             requiredMessage="You must enter your first name"
+                             validatorMessage="First name must be 1 - 20 letters">
+                    <f:validateLength minimum="1" maximum="20"/>
+                </h:inputText>
+                <h:message for="fname" errorStyle="color: red"/>
+                Last Name:
+                <h:inputText id="lname" size="30" value="#{contactBean.lastName}"
+                             required="true"
+                             requiredMessage="You must enter your last name"
+                             validatorMessage="Last name must be 1 - 20 letters">
+                    <f:validateLength minimum="1" maximum="20"/>
+                </h:inputText>
+                <h:message for="lname" errorStyle="color: red"/>
+                Phone:
+                <h:inputText id="phone" size="30" value="#{contactBean.phoneNumber}"/>
+                <h:message for="phone" errorStyle="color: red"/>
+                Email:
+                <h:inputText id="email" size="30" value="#{contactBean.email}" />
+                <h:message for="email" errorStyle="color: red" />
+                Message:
+                <h:panelGroup />
+                <h:panelGroup />
+                <h:panelGroup />
+                <h:inputTextarea id="msg" cols="30" rows="10" value="#{contactBean.message}"
+                                 validatorMessage="Message should be atleast 1 character and atmost 500 characters"> 
+                    <f:validateLength maximum="500" minimum="1"/>
+                </h:inputTextarea>
+                <h:message for="msg" errorStyle="color: red"/>
+                <h:panelGroup />
+                <h:commandButton value="SUBMIT" action="#{contactBean.submit}"/>
+            </h:panelGrid>                       
+        </h:form>
+
+        <h2>Old Messages:</h2><br/>
+        <h:form id="replyForm">           
+            <h:dataTable value="#{contactBean.messages}" var="messages">
+                <h:column>
+                    <h:outputText value="#{messages.date}" style="font-weight:bold"/><br/>
+                    <h:outputText value="#{messages.firstName} wrote:" style="font-weight:bold"/>
+                    <h:outputText value="#{messages.message}"/> <br/>
+                    <h:outputText value="Our response:" style="font-weight:bold"/>
+                    <h:outputText value="#{messages.reply}"/><br/><br/>
+                </h:column>
+                <br/>
+            </h:dataTable>
+        </h:form>
+        <h:link value="." outcome="messageManager" />
+    </ui:define>
+
+</ui:composition>

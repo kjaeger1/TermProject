@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    <h:head>
+        <title>Humishi's Ramen House</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <script> /*google maps api script */
+            var myLatLng = {lat: 35.654978, lng: -97.456566};
+            function initialize() {
+                var mapProp = {
+                    center: new google.maps.LatLng(35.654978, -97.456566),
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+                var marker = new google.maps.Marker({
+                    position: myLatLng
+                });
+
+                marker.setMap(map);
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>        
+        <style> /* centering of images */
+            .displayed {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 400px
+            }
+        </style>
+    </h:head>
+    
+    <h:body>
+        <b:container>
+            <!-- navigation bar for site-->
+            <b:navBar brand="Humishi's" brandHref="index" inverse="true">
+                <b:navbarLinks>
+                    <b:navLink value="Home" outcome="index"></b:navLink>
+                    <b:navLink value="Menu" outcome="menu"></b:navLink>
+                    <b:navLink value="Contact Us" outcome="contactUs"></b:navLink>
+                    <b:navLink icon="shopping-cart" value="Cart"></b:navLink>       
+                </b:navbarLinks>
+            </b:navBar>
+            <h1><center><strong>Humishi's House of Ramen</strong></center></h1>
+            <b:row>
+                <!-- store location info and google map insertion -->
+                <b:column col-md="3"><center>
+                        <p>Edmond, OK Location </p>
+                        <strong>
+                            <p>1919 E. 2nd St. 73034</p>
+                            <p>(405) 123-4567</p>
+                        </strong>
+                    </center>
+                    <b:column col-md="12" id="googleMap" style="width:250px; height:220px">
+                    </b:column> 
+                </b:column>
+                <!-- carousel images displayed in center of page-->
+                <b:column col-md="6">
+                    <h:form>
+                        <b:carousel id="ramen">
+                            <b:carouselItem>
+                                <img class="displayed" src="ramen1.jpg" alt="ramenpic4" />
+                            </b:carouselItem>
+                            <b:carouselItem>
+                                <img class="displayed" src="ramen2.jpg" alt="ramenpic3" />
+                            </b:carouselItem>
+                            <b:carouselItem>
+                                <img class="displayed" src="ramen3.jpg" alt="ramenpic2" />
+                            </b:carouselItem>
+                        </b:carousel>
+                    </h:form>
+                </b:column> 
+                <!-- Login information for customers -->
+                <b:column col-md="3">
+                    <b:well>
+                        <p><center>Returning Customers</center></p>
+                        <h:form>
+                            <h:panelGrid columns="2" cellpadding="5">
+
+                                <h:outputText value="Username:"/>
+                                <b:inputText>
+                                    <f:facet name="prepend">
+                                        <b:iconAwesome name="user" />
+                                    </f:facet>
+                                </b:inputText>
+                                <h:outputText value="Password:"/>
+                                <b:inputSecret>
+                                    <f:facet name="prepend">
+                                        <b:iconAwesome name="key" />
+                                    </f:facet>
+                                </b:inputSecret>
+                                <b:commandButton look="primary" value="Login"/>
+
+                            </h:panelGrid>
+                        </h:form>
+                    </b:well>
+                    <center>
+                        <p>New User?</p>
+                        <h:link value="Click Here to Register"></h:link>                       
+                    </center>
+                </b:column> 
+
+            </b:row>
+            <br />
+            <b:row>
+                <!-- large shopping button-->
+                <b:well><center>
+                        <b:button size="lg" look="primary " outcome="menu"
+                                  icon="shopping-cart" value="Click Here to Place an Online Order!!"/>
+                    </center>
+                </b:well>
+            </b:row> 
+        </b:container>
+    </h:body>
+</html>

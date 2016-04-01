@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Menu Management</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:commandLink value="Add a New Item" action="#{menu.setMode('new')}" rendered="#{menu.mode.equals('')}" />
+            <h:commandLink value="Back to List" action="#{menu.setMode('')}" rendered="#{!menu.mode.equals('')}" />
+        </h:form>
+        <h:panelGroup rendered="#{menu.mode.equals('new')}">
+            <h2>New Item</h2>
+            <h:form>
+                <h:panelGrid columns="3">
+                    Category:
+                    <h:inputText id="category" value="#{menu.newItem.category}" />
+                    <h:message for="category" errorStyle="color: red" />
+                    Name:
+                    <h:inputText id="name" value="#{menu.newItem.name}" />
+                    <h:message for="name" errorStyle="color: red" />
+                    Price:
+                    <h:inputText id="price" value="#{menu.newItem.price}" />
+                    <h:message for="price" errorStyle="color: red" />
+                    Active:
+                    <h:selectOneRadio value="#{menu.newItem.active}">
+                        <f:selectItem itemValue="true" itemLabel="True" />
+                        <f:selectItem itemValue="false" itemLabel="False" />
+                    </h:selectOneRadio>
+                    <h:panelGroup />
+                    Description:
+                    <h:inputTextarea id="description" value="#{menu.newItem.description}" /> 
+                    <h:message for="description" errorStyle="color: red" />
+                    <h:panelGroup />
+                    <h:panelGroup>
+                        <h:commandButton value="Add" action="#{menu.add}" />
+                        <h:commandButton value="Clear" action="#{menu.clear}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:form>
+            <br /><br />
+            Photos can be added on 'Edit' page.
+        </h:panelGroup>
+        <h:panelGroup rendered="#{menu.mode.equals('edit')}">
+            <h2>Edit Item</h2>
+            <h:form>
+                <h:panelGrid columns="3">
+                    Category:
+                    <h:inputText id="category" value="#{menu.item.category}" />
+                    <h:message for="category" errorStyle="color: red" />
+                    Name:
+                    <h:inputText id="name" value="#{menu.item.name}" />
+                    <h:message for="name" errorStyle="color: red" />
+                    Price:
+                    <h:inputText id="price" value="#{menu.item.price}" />
+                    <h:message for="price" errorStyle="color: red" />
+                    Active:
+                    <h:selectOneRadio value="#{menu.item.active}">
+                        <f:selectItem itemValue="true" itemLabel="True" />
+                        <f:selectItem itemValue="false" itemLabel="False" />
+                    </h:selectOneRadio>
+                    <h:panelGroup />
+                    Description:
+                    <h:inputTextarea id="description" value="#{menu.item.description}" />
+                    <h:message for="description" errorStyle="color: red" />
+                    <h:panelGroup />
+                    <h:panelGroup>
+                        <h:commandButton value="Save" action="#{menu.save}" />
+                        <h:commandButton value="Cancel" action="#{menu.setMode('')}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:form>
+            <br /><br />
+            Photos:
+            <h:form enctype="multipart/form-data">
+                #{session.setAttribute("itemId", menu.item.id)}
+                #{image.setIds(menu.item.id)}
+                <h:dataTable var="photoId" value="#{image.ids}">
+                    <h:column>
+                        <f:facet name="header">Image</f:facet>
+                        <image src="../ImageServlet?id=#{photoId}" height="100" width="100" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Delete</f:facet>
+                        <h:commandButton value="x" action="#{image.del(photoId)}" />
+                    </h:column>                </h:dataTable>    
+                <p:fileUpload  fileUploadListener="#{image.handleFileUpload}"
+                               update="@form"
+                               multiple="true" 
+                               dragDropSupport="true"
+                               allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                               sizeLimit="1000000" 
+                               fileLimit="10" />
+            </h:form>
+            <br /><br />
+            <h:form>
+                <h:commandButton value="Delete" action="#{menu.del}" />
+            </h:form>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{menu.mode.equals('')}">
+            <h:form>
+                <table>
+                    <tr>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Price</th>                
+                        <th>Description</th>
+                        <th>Photos</th>
+                        <th>Active</th>
+                    </tr>
+                    <ui:param name="photoCounts" value="#{image.counts}" />
+                    <ui:repeat var="item" value="#{menu.all}">
+                        <tr style="background-color: #{item.id == menu.item.id ? 'yellow' : ''}">
+                            <td>#{item.category}</td>
+                            <td>#{item.name}</td>
+                            <td>#{item.price}</td>
+                            <td>#{item.description.length() > 50 ? (item.description.substring(0, 50)).concat("...") : item.description}</td>
+                            <td>#{photoCounts.get(item.id)}</td>
+                            <td>#{item.active}</td>
+                            <td>
+                                <h:commandButton value="Edit" action="#{menu.edit(item)}" /> 
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                </table>
+            </h:form>
+        </h:panelGroup>
+    </h:body>
+</html>
